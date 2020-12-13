@@ -79,10 +79,10 @@
     
     theme_line = theme_ipsum(base_family = 'Secca Soft',
                              grid = 'Y', 
-                             plot_title_size = 22, 
-                             subtitle_size = 18,
+                             plot_title_size = 24, 
+                             subtitle_size = 22,
                              axis_title_just = 'center',
-                             axis_title_size = 20, 
+                             axis_title_size = 22, 
                              axis_text_size = 15,
                              strip_text_size = 16)  +
       theme(plot.title = element_text(hjust = 0, face = 'bold'),
@@ -140,3 +140,4 @@
            dpi = 500, 
            units = 'in', 
            device = 'png')
+    
