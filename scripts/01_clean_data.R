@@ -132,11 +132,11 @@
   
 # load 2020 data ---------
   
-  dt_2020 = as.data.table(read_excel(file.path(data_path, paste0('weekprod', 2020, 'tot.xls'))))
-  dt_2020 = setNames(dt_2020, nm = c('region', paste0('week_', 1:39)))
+  dt_2020 = as.data.table(read_excel(file.path(data_path, paste0('weekprodforecast', 2020, 'tot.xls'))))
+  dt_2020 = setNames(dt_2020, nm = c('region', paste0('week_', 1:49)))
   dt_2020 = dt_2020[!is.na(region)]
   dt_2020[, year := 2020]
-  setcolorder(dt_2020, c('year', c('region', paste0('week_', 1:39))))
+  setcolorder(dt_2020, c('year', c('region', paste0('week_', 1:49))))
 
 # combine all years ---------
   
