@@ -55,24 +55,30 @@
   
 # get historic weekly us total ------
   
-  dt_hist = dt_prod_new[region %in% c('U.S. Total', 'US Total') & ! week == 'annual' & year < 2020]
+  dt_hist = dt_prod_new[region %in% c('U.S. Total', 'US Total') & ! week == 'annual' & year <= 2018]
   
 # get 2020 weekly us total -------
   
+  dt_2019 = dt_prod_new[region %in% c('U.S. Total', 'US Total') & ! week == 'annual' & year == 2019]
   dt_2020 = dt_prod_new[region %in% c('U.S. Total', 'US Total') & ! week == 'annual' & year == 2020]
   
 # get min and max for each historic date -----
   
   stat_week = dt_hist[, .(min_prod = min(production_tons, na.rm = T),
-                          median_prod = median(production_tons, na.rm = T),
+                          mean_prod = mean(production_tons, na.rm = T),
                           max_prod = max(production_tons, na.rm = T)), by = .(week)]
 
 # ------------------------- plot ------------------------- 
   
   # theme  -----------
   
+    range_col = '#c1c1c1'
+    mean_col = '#000000'
+    col_2019 = '#c30044'
+    col_2020 = '#ebd74e'
+    
     theme_line = theme_ipsum(base_family = 'Secca Soft',
-                             grid = 'X', 
+                             grid = 'Y', 
                              plot_title_size = 24, 
                              subtitle_size = 20,
                              axis_title_just = 'center',
@@ -89,19 +95,18 @@
             axis.text.x = element_text(hjust = 0.5, vjust = 0.5),
             axis.text.y = element_text(margin = margin(r = .3, unit = "cm")),
             axis.title.x = element_text(margin = margin(t = .3, unit = "cm")),
-            plot.margin = unit(c(1,2,1,1), "lines"),
+            plot.margin = unit(c(1,1,1,1), "lines"),
             legend.text = element_text(size = 18),
-            legend.position = 'bottom',
-            panel.grid.major.x = element_line(color = '#b8b8b8', linetype = 2, size = 0.3))
+            legend.position = 'bottom')
+            # panel.grid.major.x = element_line(color = '#b8b8b8', linetype = 2, size = 0.3))
   
   # segment: coal ---------
   
     fig_coal = ggplot() +
-      # geom_segment(data = stat_week, 
-      #              aes(x = as.numeric(week), xend = as.numeric(week),  y = min_prod/1e6, yend = max_prod/1e6), color = '#f0dfb2', alpha = 0.7, size = 8) + 
-      geom_ribbon(data = stat_week, aes(x = as.numeric(week), ymin = min_prod/1e6, ymax = max_prod/1e6, fill = 'range'), alpha = 0.7) +
-      geom_line(data = stat_week, aes(x = as.numeric(week), y = median_prod/1e6, color = 'median'), size = 1.3) + 
-      geom_line(data = dt_2020[week < 40], aes(x = as.numeric(week), y = production_tons/1e6, color = 'curyear'), size = 1.3) + 
+      geom_ribbon(data = stat_week, aes(x = as.numeric(week), ymin = min_prod/1e6, ymax = max_prod/1e6), fill = range_col, alpha = 0.7) +
+      geom_line(data = stat_week, aes(x = as.numeric(week), y = mean_prod/1e6), color = mean_col, size = 1.3) + 
+      geom_line(data = dt_2019[week < 53], aes(x = as.numeric(week), y = production_tons/1e6), color = col_2019, size = 1.3) + 
+      geom_line(data = dt_2020[week < 40], aes(x = as.numeric(week), y = production_tons/1e6), color = col_2020, size = 1.3) + 
       labs(title = 'U.S. weekly coal production',
            subtitle = 'Million tons',
            x = 'Week',
@@ -109,18 +114,27 @@
            color = NULL,
            linetype = NULL) +
       scale_x_continuous(breaks = seq(1, 52, 1), limits = c(1, 52), expand = c(0, 0)) +
-      scale_y_continuous(breaks = seq(0, 25, 5), limits = c(0, 25), expand = c(0, 0)) +
-      scale_fill_manual(name = NULL,
-                        labels = c('range' = 'Range (1984-2019)'),
-                        values = c('range' = '#f0dfb2')) +
-      scale_color_manual(name = NULL, 
-                         labels = c('median' = 'Median (1984-2019)', 
-                                    'curyear' = '2020'),
-                         values = c('median' = '#cfa255',
-                                    'curyear' = '#00526d')) +
+      scale_y_continuous(breaks = seq(0, 26, 2), limits = c(0, 26), expand = c(0, 0)) +
+      # scale_fill_manual(name = NULL,
+      #                   labels = c('range' = 'Range (1984-2018)'),
+      #                   values = c('range' = '#599aa8')) +
+      # scale_color_manual(name = NULL, 
+      #                    labels = c('mean' = 'Mean (1984-2018)', 
+      #                               'curyear' = '2020'),
+      #                    values = c('mean' = '#0f5e74',
+      #                               'curyear' = '#7a1134')) +
+      annotate(geom = 'text', label = 'range (1984-2018)', x = 25, y = 23.4, color = range_col,
+               size = 6, fontface = 'bold', family = 'Secca Soft') + 
+      annotate(geom = 'text', label = 'average (1984-2018)', x = 25, y = 20.1, color = mean_col,
+               size = 6, fontface = 'bold', family = 'Secca Soft') + 
+      annotate(geom = 'text', label = '2019', x = 25, y = 14.5, color = col_2019,
+               size = 6, fontface = 'bold', family = 'Secca Soft') + 
+      annotate(geom = 'text', label = '2020', x = 25, y = 8.6, color = col_2020,
+               size = 6, fontface = 'bold', family = 'Secca Soft') + 
+    # geom_text(label = 'range (1984-2019)', x = 21, y = 23, color = '#f0dfb2', size = 3) + 
       theme_line
     # fig_coal
-    
+  
     ggsave(fig_coal, 
            filename = here::here('figures', 'fig_weekly_coal_production.pdf'), 
            width = 16, 
@@ -128,7 +142,7 @@
     
     embed_fonts(here::here('figures', 'fig_weekly_coal_production.pdf'),
                 outfile = here::here('figures', 'fig_weekly_coal_production.pdf'))
-
+    
     ggsave(fig_coal,
            filename = here::here('figures', 'fig_weekly_coal_production.png'),
            width = 16, 
@@ -136,4 +150,5 @@
            dpi = 500, 
            units = 'in', 
            device = 'png')
-    
+  
+  
