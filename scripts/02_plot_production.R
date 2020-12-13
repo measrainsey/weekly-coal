@@ -69,15 +69,15 @@
 
 # ------------------------- plot ------------------------- 
   
-  # theme and color palettes -----------
+  # theme  -----------
   
     theme_line = theme_ipsum(base_family = 'Secca Soft',
                              grid = 'X', 
-                             plot_title_size = 20, 
-                             subtitle_size = 18,
+                             plot_title_size = 24, 
+                             subtitle_size = 20,
                              axis_title_just = 'center',
-                             axis_title_size = 18, 
-                             axis_text_size = 16,
+                             axis_title_size = 20, 
+                             axis_text_size = 15,
                              strip_text_size = 16)  +
       theme(plot.title = element_text(hjust = 0, face = 'bold'),
             plot.title.position = 'plot',
@@ -86,28 +86,54 @@
             axis.line.x = element_line(color = 'black'),
             axis.ticks.x = element_line(color = 'black'),
             axis.ticks.length.x = unit(0.25, "cm"),
-            axis.text.x = element_text(hjust = 0.5),
+            axis.text.x = element_text(hjust = 0.5, vjust = 0.5),
             axis.text.y = element_text(margin = margin(r = .3, unit = "cm")),
+            axis.title.x = element_text(margin = margin(t = .3, unit = "cm")),
             plot.margin = unit(c(1,2,1,1), "lines"),
-            legend.text = element_text(size = 16),
+            legend.text = element_text(size = 18),
             legend.position = 'bottom',
             panel.grid.major.x = element_line(color = '#b8b8b8', linetype = 2, size = 0.3))
   
   # segment: coal ---------
   
     fig_coal = ggplot() +
-      geom_segment(data = stat_week, 
-                   aes(x = as.numeric(week), xend = as.numeric(week),  y = min_prod/1e6, yend = max_prod/1e6), color = '#f0dfb2', alpha = 0.7, size = 10) + 
-      geom_line(data = stat_week, aes(x = as.numeric(week), y = median_prod/1e6), color = '#cfa255', size = 1) + 
-      geom_line(data = dt_2020[week < 40], aes(x = as.numeric(week), y = production_tons/1e6), color = '#00526d', size = 1) + 
+      # geom_segment(data = stat_week, 
+      #              aes(x = as.numeric(week), xend = as.numeric(week),  y = min_prod/1e6, yend = max_prod/1e6), color = '#f0dfb2', alpha = 0.7, size = 8) + 
+      geom_ribbon(data = stat_week, aes(x = as.numeric(week), ymin = min_prod/1e6, ymax = max_prod/1e6, fill = 'range'), alpha = 0.7) +
+      geom_line(data = stat_week, aes(x = as.numeric(week), y = median_prod/1e6, color = 'median'), size = 1.3) + 
+      geom_line(data = dt_2020[week < 40], aes(x = as.numeric(week), y = production_tons/1e6, color = 'curyear'), size = 1.3) + 
       labs(title = 'U.S. weekly coal production',
            subtitle = 'Million tons',
-           x = NULL,
+           x = 'Week',
            y = NULL,
            color = NULL,
            linetype = NULL) +
       scale_x_continuous(breaks = seq(1, 52, 1), limits = c(1, 52), expand = c(0, 0)) +
       scale_y_continuous(breaks = seq(0, 25, 5), limits = c(0, 25), expand = c(0, 0)) +
+      scale_fill_manual(name = NULL,
+                        labels = c('range' = 'Minimum and maximum production (1984-2019)'),
+                        values = c('range' = '#f0dfb2')) +
+      scale_color_manual(name = NULL, 
+                         labels = c('median' = 'Median production (1984-2019)', 
+                                    'curyear' = 'Production in 2020'),
+                         values = c('median' = '#cfa255',
+                                    'curyear' = '#00526d')) +
       theme_line
-    fig_coal
+    # fig_coal
+    
+    ggsave(fig_coal, 
+           filename = here::here('figures', 'fig_weekly_coal_production.pdf'), 
+           width = 16, 
+           height = 8.5)
+    
+    embed_fonts(here::here('figures', 'fig_weekly_coal_production.pdf'),
+                outfile = here::here('figures', 'fig_weekly_coal_production.pdf'))
+
+    ggsave(fig_coal,
+           filename = here::here('figures', 'fig_weekly_coal_production.png'),
+           width = 16, 
+           height = 8.5,
+           dpi = 500, 
+           units = 'in', 
+           device = 'png')
     
