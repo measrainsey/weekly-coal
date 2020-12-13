@@ -98,8 +98,7 @@
             plot.margin = unit(c(1,1,1,1), "lines"),
             legend.text = element_text(size = 18),
             legend.position = 'bottom')
-            # panel.grid.major.x = element_line(color = '#b8b8b8', linetype = 2, size = 0.3))
-  
+
   # segment: coal ---------
   
     fig_coal = ggplot() +
@@ -115,14 +114,6 @@
            linetype = NULL) +
       scale_x_continuous(breaks = seq(1, 52, 1), limits = c(1, 52), expand = c(0, 0)) +
       scale_y_continuous(breaks = seq(0, 26, 2), limits = c(0, 26), expand = c(0, 0)) +
-      # scale_fill_manual(name = NULL,
-      #                   labels = c('range' = 'Range (1984-2018)'),
-      #                   values = c('range' = '#599aa8')) +
-      # scale_color_manual(name = NULL, 
-      #                    labels = c('mean' = 'Mean (1984-2018)', 
-      #                               'curyear' = '2020'),
-      #                    values = c('mean' = '#0f5e74',
-      #                               'curyear' = '#7a1134')) +
       annotate(geom = 'text', label = 'range (1984-2018)', x = 25, y = 23.4, color = range_col,
                size = 6, fontface = 'bold', family = 'Secca Soft') + 
       annotate(geom = 'text', label = 'average (1984-2018)', x = 25, y = 20.1, color = mean_col,
@@ -131,7 +122,6 @@
                size = 6, fontface = 'bold', family = 'Secca Soft') + 
       annotate(geom = 'text', label = '2020', x = 25, y = 8.6, color = col_2020,
                size = 6, fontface = 'bold', family = 'Secca Soft') + 
-    # geom_text(label = 'range (1984-2019)', x = 21, y = 23, color = '#f0dfb2', size = 3) + 
       theme_line
     # fig_coal
   
@@ -150,5 +140,3 @@
            dpi = 500, 
            units = 'in', 
            device = 'png')
-  
-  
