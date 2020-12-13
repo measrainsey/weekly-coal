@@ -4,7 +4,11 @@
 
 # --------------------- inputs ----------------------
 
-  data_path   = '/Users/MEAS/Google Drive/data/eia/weekly-coal-production'
+  data_path       = '/Users/MEAS/Google Drive/data/eia/weekly-coal-production'
+  
+# --------------------- outputs ----------------------
+  
+  processed_file  = 'weekly_coal_production_1984_2020.csv'
   
 # --------------------- main ----------------------
   
@@ -37,8 +41,6 @@
   dt_1984_2000 = rbindlist(l_1984_2000, fill = T)
   dt_1984_2000 = dt_1984_2000[!is.na(region)]
   
-  # dt_1984_2000_tot = dt_1984_2000[state %in% c('U.S. Total', 'US Total')]
-    
 # load 2001 data ---------
     
   dt_2001 = as.data.table(read_excel(file.path(data_path, paste0('weekprod', 2001, 'tot.xls')), skip = 1))
@@ -154,5 +156,14 @@
   
 # convert production to numeric ------
   
+  dt_long[, week := factor(week, levels = c(1:53, 'annual'))]
   dt_long[, production_tons := as.numeric(production_tons)]
+  
+# reorder rows -------
+  
+  setorder(dt_long, year, week, region)
+  
+# export to csv -----------
+  
+  fwrite(dt_long, here::here('data', processed_file), row.names = F)
   
