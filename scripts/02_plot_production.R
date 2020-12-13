@@ -111,11 +111,11 @@
       scale_x_continuous(breaks = seq(1, 52, 1), limits = c(1, 52), expand = c(0, 0)) +
       scale_y_continuous(breaks = seq(0, 25, 5), limits = c(0, 25), expand = c(0, 0)) +
       scale_fill_manual(name = NULL,
-                        labels = c('range' = 'Minimum and maximum production (1984-2019)'),
+                        labels = c('range' = 'Range (1984-2019)'),
                         values = c('range' = '#f0dfb2')) +
       scale_color_manual(name = NULL, 
-                         labels = c('median' = 'Median production (1984-2019)', 
-                                    'curyear' = 'Production in 2020'),
+                         labels = c('median' = 'Median (1984-2019)', 
+                                    'curyear' = '2020'),
                          values = c('median' = '#cfa255',
                                     'curyear' = '#00526d')) +
       theme_line
