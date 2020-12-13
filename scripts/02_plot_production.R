@@ -79,15 +79,15 @@
     
     theme_line = theme_ipsum(base_family = 'Secca Soft',
                              grid = 'Y', 
-                             plot_title_size = 24, 
-                             subtitle_size = 20,
+                             plot_title_size = 22, 
+                             subtitle_size = 18,
                              axis_title_just = 'center',
                              axis_title_size = 20, 
                              axis_text_size = 15,
                              strip_text_size = 16)  +
       theme(plot.title = element_text(hjust = 0, face = 'bold'),
             plot.title.position = 'plot',
-            plot.subtitle = element_text(hjust = 0),
+            plot.subtitle = element_text(hjust = 0, face = 'bold', color = '#535353'),
             plot.caption = element_text(size = 11, color = '#5c5c5c', face = 'plain'),
             axis.line.x = element_line(color = 'black'),
             axis.ticks.x = element_line(color = 'black'),
@@ -107,7 +107,7 @@
       geom_line(data = dt_2019[week < 53], aes(x = as.numeric(week), y = production_tons/1e6), color = col_2019, size = 1.3) + 
       geom_line(data = dt_2020[week < 40], aes(x = as.numeric(week), y = production_tons/1e6), color = col_2020, size = 1.3) + 
       labs(title = 'U.S. weekly coal production',
-           subtitle = 'Million tons',
+           subtitle = 'Million short tons',
            x = 'Week',
            y = NULL,
            color = NULL,
@@ -115,13 +115,13 @@
       scale_x_continuous(breaks = seq(1, 52, 1), limits = c(1, 52), expand = c(0, 0)) +
       scale_y_continuous(breaks = seq(0, 26, 2), limits = c(0, 26), expand = c(0, 0)) +
       annotate(geom = 'text', label = 'range (1984-2018)', x = 25, y = 23.4, color = range_col,
-               size = 6, fontface = 'bold', family = 'Secca Soft') + 
+               size = 7, fontface = 'bold', family = 'Secca Soft') + 
       annotate(geom = 'text', label = 'average (1984-2018)', x = 25, y = 20.1, color = mean_col,
-               size = 6, fontface = 'bold', family = 'Secca Soft') + 
+               size = 7, fontface = 'bold', family = 'Secca Soft') + 
       annotate(geom = 'text', label = '2019', x = 25, y = 14.5, color = col_2019,
-               size = 6, fontface = 'bold', family = 'Secca Soft') + 
+               size = 7, fontface = 'bold', family = 'Secca Soft') + 
       annotate(geom = 'text', label = '2020', x = 25, y = 8.6, color = col_2020,
-               size = 6, fontface = 'bold', family = 'Secca Soft') + 
+               size = 7, fontface = 'bold', family = 'Secca Soft') + 
       theme_line
     # fig_coal
   
