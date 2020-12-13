@@ -105,7 +105,7 @@
       geom_ribbon(data = stat_week, aes(x = as.numeric(week), ymin = min_prod/1e6, ymax = max_prod/1e6), fill = range_col, alpha = 0.7) +
       geom_line(data = stat_week, aes(x = as.numeric(week), y = mean_prod/1e6), color = mean_col, size = 1.3) + 
       geom_line(data = dt_2019[week < 53], aes(x = as.numeric(week), y = production_tons/1e6), color = col_2019, size = 1.3) + 
-      geom_line(data = dt_2020[week < 40], aes(x = as.numeric(week), y = production_tons/1e6), color = col_2020, size = 1.3) + 
+      geom_line(data = dt_2020[week <= 49], aes(x = as.numeric(week), y = production_tons/1e6), color = col_2020, size = 1.3) + 
       labs(title = 'U.S. weekly coal production',
            subtitle = 'Million short tons',
            x = 'Week',
