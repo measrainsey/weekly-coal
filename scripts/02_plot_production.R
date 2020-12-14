@@ -88,7 +88,7 @@
       theme(plot.title = element_text(hjust = 0, face = 'bold'),
             plot.title.position = 'plot',
             plot.subtitle = element_text(hjust = 0, face = 'bold', color = '#535353'),
-            plot.caption = element_text(size = 11, color = '#5c5c5c', face = 'plain'),
+            plot.caption = element_text(size = 14, color = '#5c5c5c', face = 'plain'),
             axis.line.x = element_line(color = 'black'),
             axis.ticks.x = element_line(color = 'black'),
             axis.ticks.length.x = unit(0.25, "cm"),
@@ -106,8 +106,9 @@
       geom_line(data = stat_week, aes(x = as.numeric(week), y = mean_prod/1e6), color = mean_col, size = 1.3) + 
       geom_line(data = dt_2019[week < 53], aes(x = as.numeric(week), y = production_tons/1e6), color = col_2019, size = 1.3) + 
       geom_line(data = dt_2020[week <= 49], aes(x = as.numeric(week), y = production_tons/1e6), color = col_2020, size = 1.3) + 
-      labs(title = 'U.S. weekly coal production',
+      labs(title = 'U.S. weekly coal production (up to December 5, 2020)',
            subtitle = 'Million short tons',
+           caption = 'Source: U.S. Energy Information Administration',
            x = 'Week',
            y = NULL,
            color = NULL,
