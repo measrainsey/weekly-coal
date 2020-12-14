@@ -120,7 +120,7 @@
                size = 7, fontface = 'bold', family = 'Secca Soft') + 
       annotate(geom = 'text', label = '2019', x = 25, y = 14.5, color = col_2019,
                size = 7, fontface = 'bold', family = 'Secca Soft') + 
-      annotate(geom = 'text', label = '2020', x = 25, y = 8.6, color = col_2020,
+      annotate(geom = 'text', label = '2020', x = 25, y = 8.45, color = col_2020,
                size = 7, fontface = 'bold', family = 'Secca Soft') + 
       theme_line
     # fig_coal
