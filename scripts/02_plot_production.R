@@ -20,9 +20,17 @@
 # load data ---------
   
   dt_prod = fread(here::here('data', data_file), header = T)
-  dt_prod = dt_prod[!is.na(production_tons)]
-  dt_prod = dt_prod[region %in% c('U.S. Total', 'US Total') ]
-  dt_prod = dt_prod[! week == 'annual']
+  
+# filter data -----
+  
+  # remove NA production values
+    dt_prod = dt_prod[!is.na(production_tons)]
+  
+  # only get US totals
+    dt_prod = dt_prod[region %in% c('U.S. Total', 'US Total') ]
+  
+  # remove annual totals
+    dt_prod = dt_prod[! week == 'annual']
   
 # combine week 53 of previous with week 1 of current year ------
   
@@ -33,6 +41,7 @@
                               (week == '1' & year %in% (half_weeks[week == '53', year] + 1)) | 
                               (week == '1' & year %in% half_weeks[week == '1', year])  | 
                               (week == '53' & year %in% (half_weeks[week == '1', year] - 1)) ]
+  
   half_weeks_full[week == '53', new_year := year + 1]
   half_weeks_full[week == '53', new_week := '1']
   half_weeks_full[week == '1', new_year := year]
@@ -46,23 +55,23 @@
   
   dt_prod_3 = rbindlist(list(dt_prod_2, half_weeks), use.names = T, fill = T)
   
-# recalculate production ------
+# recalculate production with re-assigned years and weeks ------
   
   dt_prod_new = dt_prod_3[, .(production_tons = sum(production_tons, na.rm = T)),
                           by = .(new_year, new_week, region)]
   setnames(dt_prod_new, 'new_year', 'year')
   setnames(dt_prod_new, 'new_week', 'week')
   
-# get historic weekly us total ------
+# get historic (2018 and earlier) data ------
   
-  dt_hist = dt_prod_new[region %in% c('U.S. Total', 'US Total') & ! week == 'annual' & year <= 2018]
+  dt_hist = dt_prod_new[year <= 2018]
   
-# get 2020 weekly us total -------
+# get 2019 and 2020 data separately -------
   
-  dt_2019 = dt_prod_new[region %in% c('U.S. Total', 'US Total') & ! week == 'annual' & year == 2019]
-  dt_2020 = dt_prod_new[region %in% c('U.S. Total', 'US Total') & ! week == 'annual' & year == 2020]
+  dt_2019 = dt_prod_new[year == 2019]
+  dt_2020 = dt_prod_new[year == 2020]
   
-# get min and max for each historic date -----
+# get min and max for each historic week -----
   
   stat_week = dt_hist[, .(min_prod = min(production_tons, na.rm = T),
                           mean_prod = mean(production_tons, na.rm = T),
